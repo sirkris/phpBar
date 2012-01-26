@@ -9,6 +9,24 @@ else
 	$percent = 0;
 }
 
+$timings = FALSE;
+if ( isset( $_GET["timings"] ) )
+{
+	if ( !isset( $_SESSION ) )
+	{
+		session_start();
+	}
+	
+	if ( !isset( $_SESSION["phpbar_timings"] ) || !is_array( $_SESSION["phpbar_timings"] ) || isset( $_GET["init"] ) )
+	{
+		$_SESSION["phpbar_timings"] = array();
+	}
+	
+	$_SESSION["phpbar_timings"][] = array( "start" => NULL, "end" => NULL );
+	
+	$timings = TRUE;
+}
+
 function LoadPNG( $filename )
 {
 	$im = @imagecreatefrompng( $filename );
@@ -25,6 +43,11 @@ function LoadPNG( $filename )
 	}
 	
 	return $im;
+}
+
+if ( $timings == TRUE )
+{
+	$_SESSION["phpbar_timings"][count( $_SESSION["phpbar_timings"] ) - 1]["start"] = microtime( TRUE );
 }
 
 header( "Content-Type: image/png" );
@@ -65,3 +88,8 @@ if ( $percent > 0 )
 }
 
 imagepng( $progress_bar );
+
+if ( $timings == TRUE )
+{
+	$_SESSION["phpbar_timings"][count( $_SESSION["phpbar_timings"] ) - 1]["end"] = microtime( TRUE );
+}
