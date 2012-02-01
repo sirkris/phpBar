@@ -80,7 +80,10 @@ $progress_bar_fill_right = LoadPNG( "progress_bar_fill_right.png" );
 $bg = imagecolorallocate( $progress_bar, 254, 254, 254 );
 imagecolortransparent( $progress_bar, $bg );
 
-if ( $percent > 0 )
+/* If the progress bar is divided into multiple stages, convert the percentage accordingly.  --Kris */
+$base_percent = ($cur_stage - 1) / $total_stages;
+
+if ( ($base_percent + $percent) > 0 )
 {
 	$startx = 1;
 	$starty = 1;
@@ -90,16 +93,24 @@ if ( $percent > 0 )
 	
 	$total = $end - $startx - imagesx( $progress_bar_fill_left ) - imagesx( $progress_bar_fill_right );
 	
+	/* The maximum amount that can be filled within each stage.  --Kris */
+	$total /= $total_stages;
+	
 	imagecopy( $progress_bar, $progress_bar_fill_left, $startx, $starty, 0, 0, imagesx( $progress_bar_fill_left ), imagesy( $progress_bar_fill_left ) );
 	
 	$currentx += imagesx( $progress_bar_fill_left );
 	
-	$fillto = round( $total * ($percent / 100) );
-	for ( $fill = 1; $fill <= $fillto; $fill++ )
+	for ( $stageloop = 1; $stageloop <= $cur_stage; $stageloop++ )
 	{
-		imagecopy( $progress_bar, $progress_bar_fill, $currentx, $starty, 0, 0, imagesx( $progress_bar_fill ), imagesy( $progress_bar_fill ) );
+		$stage_percent = ( $stageloop < $cur_stage ? 100 : $percent );
 		
-		$currentx++;
+		$fillto = round( $total * ($stage_percent / 100) );
+		for ( $fill = 1; $fill <= $fillto; $fill++ )
+		{
+			imagecopy( $progress_bar, $progress_bar_fill, $currentx, $starty, 0, 0, imagesx( $progress_bar_fill ), imagesy( $progress_bar_fill ) );
+			
+			$currentx++;
+		}
 	}
 	
 	imagecopy( $progress_bar, $progress_bar_fill_right, $currentx, $starty, 0, 0, imagesx( $progress_bar_fill_right ), imagesy( $progress_bar_fill_right ) );
