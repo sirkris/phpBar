@@ -99,7 +99,6 @@ if ( ($base_percent + $percent) > 0 )
 	imagecopy( $progress_bar, $progress_bar_fill_left, $startx, $starty, 0, 0, imagesx( $progress_bar_fill_left ), imagesy( $progress_bar_fill_left ) );
 	
 	$currentx += imagesx( $progress_bar_fill_left );
-	
 	for ( $stageloop = 1; $stageloop <= $cur_stage; $stageloop++ )
 	{
 		$stage_percent = ( $stageloop < $cur_stage ? 100 : $percent );
@@ -114,6 +113,21 @@ if ( ($base_percent + $percent) > 0 )
 	}
 	
 	imagecopy( $progress_bar, $progress_bar_fill_right, $currentx, $starty, 0, 0, imagesx( $progress_bar_fill_right ), imagesy( $progress_bar_fill_right ) );
+}
+
+/* Draw the stage divider lines.  --Kris */
+if ( $total_stages > 1 )
+{
+	$stage_divider = imagecolorallocate( $progress_bar, 190, 190, 0 );
+	$total = $end - $startx - imagesx( $progress_bar_fill_left ) - imagesx( $progress_bar_fill_right );
+	
+	$currentx += imagesx( $progress_bar_fill_left );
+	for ( $stageloop = 1; $stageloop < $total_stages; $stageloop++ )
+	{
+		$line_x = round( $stageloop * ($total / $total_stages) );
+		
+		imageline( $progress_bar, $line_x, $starty, $line_x, $starty + imagesy( $progress_bar_fill ) - 1, $stage_divider );
+	}
 }
 
 imagepng( $progress_bar );
