@@ -9,6 +9,24 @@ else
 	$percent = 0;
 }
 
+if ( isset( $_GET["total_stages"] ) && is_numeric( $_GET["total_stages"] ) && $_GET["total_stages"] > 0 )
+{
+	$total_stages = $_GET["total_stages"];
+}
+else
+{
+	$total_stages = 1;
+}
+
+if ( isset( $_GET["cur_stage"] ) && is_numeric( $_GET["cur_stage"] ) && $_GET["cur_stage"] > 0 )
+{
+	$cur_stage = ( $_GET["cur_stage"] <= $total_stages ? $_GET["cur_stage"] : $total_stages );
+}
+else
+{
+	$cur_stage = 1;
+}
+
 $timings = FALSE;
 if ( isset( $_GET["timings"] ) )
 {
