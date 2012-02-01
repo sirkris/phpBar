@@ -118,6 +118,12 @@ if ( ($base_percent + $percent) > 0 )
 /* Draw the stage divider lines.  --Kris */
 if ( $total_stages > 1 )
 {
+	$startx = 1;
+	$starty = 1;
+	
+	$currentx = $startx;
+	$end = imagesx( $progress_bar ) - 1;
+	
 	$stage_divider = imagecolorallocate( $progress_bar, 190, 190, 0 );
 	$total = $end - $startx - imagesx( $progress_bar_fill_left ) - imagesx( $progress_bar_fill_right );
 	
