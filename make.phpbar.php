@@ -103,7 +103,7 @@ if ( ($base_percent + $percent) > 0 )
 	{
 		$stage_percent = ( $stageloop < $cur_stage ? 100 : $percent );
 		
-		$fillto = round( $total * ($stage_percent / 100) );
+		$fillto = round( $total * ($stage_percent / 100), 0, PHP_ROUND_HALF_UP );
 		for ( $fill = 1; $fill <= $fillto; $fill++ )
 		{
 			imagecopy( $progress_bar, $progress_bar_fill, $currentx, $starty, 0, 0, imagesx( $progress_bar_fill ), imagesy( $progress_bar_fill ) );
@@ -130,7 +130,7 @@ if ( $total_stages > 1 )
 	/* If specified, move the goal posts to the right so that the tip of the fill touches it at 100%.  --Kris */
 	if ( isset( $_GET["modstages"] ) && $_GET["modstages"] == 1 )
 	{
-		$mod = imagesx( $progress_bar_fill_right );
+		$mod = imagesx( $progress_bar_fill_left ) + imagesx( $progress_bar_fill_right );
 	}
 	else
 	{
@@ -140,7 +140,7 @@ if ( $total_stages > 1 )
 	$currentx += imagesx( $progress_bar_fill_left );
 	for ( $stageloop = 1; $stageloop < $total_stages; $stageloop++ )
 	{
-		$line_x = round( $stageloop * ($total / $total_stages) ) + $mod;
+		$line_x = $stageloop * round( ($total / $total_stages), 0, PHP_ROUND_HALF_DOWN ) + $mod;
 		
 		imageline( $progress_bar, $line_x, $starty, $line_x, $starty + imagesy( $progress_bar_fill ) - 1, $stage_divider );
 	}
