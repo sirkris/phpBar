@@ -127,10 +127,20 @@ if ( $total_stages > 1 )
 	$stage_divider = imagecolorallocate( $progress_bar, 190, 190, 0 );
 	$total = $end - $startx - imagesx( $progress_bar_fill_left ) - imagesx( $progress_bar_fill_right );
 	
+	/* If specified, move the goal posts to the right so that the tip of the fill touches it at 100%.  --Kris */
+	if ( isset( $_GET["modstages"] ) && $_GET["modstages"] == 1 )
+	{
+		$mod = imagesx( $progress_bar_fill_right );
+	}
+	else
+	{
+		$mod = 0;
+	}
+	
 	$currentx += imagesx( $progress_bar_fill_left );
 	for ( $stageloop = 1; $stageloop < $total_stages; $stageloop++ )
 	{
-		$line_x = round( $stageloop * ($total / $total_stages) );
+		$line_x = round( $stageloop * ($total / $total_stages) ) + $mod;
 		
 		imageline( $progress_bar, $line_x, $starty, $line_x, $starty + imagesy( $progress_bar_fill ) - 1, $stage_divider );
 	}
