@@ -125,7 +125,7 @@ if ( ($base_percent + $percent) > 0 )
 }
 
 /* Draw the stage divider lines.  --Kris */
-if ( $total_stages > 1 )
+if ( $total_stages > 1 && $nomarkers == FALSE )
 {
 	$startx = 1;
 	$starty = 1;
@@ -157,7 +157,7 @@ if ( $total_stages > 1 )
 
 imagepng( $progress_bar );
 
-if ( $timings == TRUE && $nomarkers == FALSE )
+if ( $timings == TRUE )
 {
 	$_SESSION["phpbar_timings"][count( $_SESSION["phpbar_timings"] ) - 1]["end"] = microtime( TRUE );
 }
