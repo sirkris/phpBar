@@ -27,6 +27,15 @@ else
 	$cur_stage = 1;
 }
 
+if ( isset( $_GET["nomarkers"] ) && is_numeric( $_GET["nomarkers"] ) && $_GET["nomarkers"] > 0 )
+{
+	$nomarkers = TRUE;
+}
+else
+{
+	$nomarkers = FALSE;
+}
+
 $timings = FALSE;
 if ( isset( $_GET["timings"] ) )
 {
@@ -148,7 +157,7 @@ if ( $total_stages > 1 )
 
 imagepng( $progress_bar );
 
-if ( $timings == TRUE )
+if ( $timings == TRUE && $nomarkers == FALSE )
 {
 	$_SESSION["phpbar_timings"][count( $_SESSION["phpbar_timings"] ) - 1]["end"] = microtime( TRUE );
 }
